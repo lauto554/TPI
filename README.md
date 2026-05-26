@@ -1,25 +1,46 @@
-# TPI - Programacion I
+# Trabajo Practico Integrador - Programacion I
 
-Esqueleto inicial del Trabajo Practico Integrador.
+Repositorio correspondiente al Trabajo Practico Integrador de la materia Programacion I.
 
-## Objetivo
+## Descripcion
 
-Base funcional para trabajar en grupo de forma asincronica, separando responsabilidades por archivo sin resolver todavia la consigna completa.
+El programa permite trabajar con informacion de paises mediante un menu por consola. La organizacion del proyecto se separa en distintos modulos para facilitar el desarrollo y la lectura del codigo.
 
-## Estructura
+## Requisitos
 
-```text
-main.py              # Punto de entrada
-menu.py              # Menu principal con questionary
-datos.py             # Carga, guardado y ABM de paises
-filtros.py           # Busquedas y filtros
-ordenamientos.py     # Ordenamientos
-estadisticas.py      # Calculos y reportes
-utils.py             # Limpieza de consola, pausa y helpers comunes
-requirements.txt     # Dependencias
+- Python 3
+- Libreria `questionary`
+
+Para instalar las dependencias:
+
+```bash
+pip install -r requirements.txt
 ```
 
-## Formato acordado para un pais
+## Ejecucion
+
+Desde la carpeta del proyecto:
+
+```bash
+python main.py
+```
+
+## Estructura del proyecto
+
+```text
+main.py              Punto de entrada del programa
+menu.py              Menu principal
+datos.py             Carga, guardado y gestion de paises
+filtros.py           Funciones de busqueda y filtrado
+ordenamientos.py     Funciones de ordenamiento
+estadisticas.py      Calculos y estadisticas
+utils.py             Funciones auxiliares
+requirements.txt     Dependencias del proyecto
+```
+
+## Formato de datos
+
+Cada pais se representa mediante un diccionario con la siguiente estructura:
 
 ```python
 pais = {
@@ -30,24 +51,4 @@ pais = {
 }
 ```
 
-Todas las funciones deben recibir y devolver datos respetando ese formato.
-
-## Instalacion
-
-```bash
-pip install -r requirements.txt
-```
-
-## Ejecucion
-
-```bash
-python main.py
-```
-
-## Flujo sugerido
-
-- Crear una rama por modulo o tarea.
-- No trabajar los dos sobre el mismo archivo al mismo tiempo si no es necesario.
-- Abrir pull request antes de mezclar cambios a `main`.
-- Mantener `main.py` limpio: solo debe iniciar el programa.
-
+La coleccion de paises se maneja como una lista de diccionarios.

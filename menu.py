@@ -10,7 +10,27 @@ from ordenamientos import ordenar_paises
 from utils import limpiar_consola, mostrar_titulo, pausar
 
 
+OPCIONES_MENU = {
+    "Listar paises": listar_paises,
+    "Agregar pais": agregar_pais,
+    "Modificar pais": modificar_pais,
+    "Eliminar pais": eliminar_pais,
+    "Buscar paises": buscar_paises,
+    "Filtrar paises": filtrar_paises,
+    "Ordenar paises": ordenar_paises,
+    "Estadisticas": mostrar_estadisticas,
+    "Guardar cambios": guardar_paises,
+}
+
+OPCION_SALIR = "Salir"
+
+
 def ejecutar_menu():
+    if questionary is None:
+        print("Falta instalar questionary. Ejecute: pip install -r requirements.txt")
+        pausar()
+        return
+
     paises = cargar_paises()
 
     while True:
@@ -21,50 +41,17 @@ def ejecutar_menu():
 
         limpiar_consola()
 
-        if opcion == "Listar paises":
-            listar_paises(paises)
-        elif opcion == "Agregar pais":
-            agregar_pais(paises)
-        elif opcion == "Modificar pais":
-            modificar_pais(paises)
-        elif opcion == "Eliminar pais":
-            eliminar_pais(paises)
-        elif opcion == "Buscar paises":
-            buscar_paises(paises)
-        elif opcion == "Filtrar paises":
-            filtrar_paises(paises)
-        elif opcion == "Ordenar paises":
-            ordenar_paises(paises)
-        elif opcion == "Estadisticas":
-            mostrar_estadisticas(paises)
-        elif opcion == "Guardar cambios":
-            guardar_paises(paises)
-        elif opcion == "Salir":
+        if opcion == OPCION_SALIR:
             guardar_paises(paises)
             print("Programa finalizado.")
             break
 
-        if opcion != "Salir":
-            pausar()
+        funcion = OPCIONES_MENU[opcion]
+        funcion(paises)
+        pausar()
 
 
 def seleccionar_opcion():
-    opciones = [
-        "Listar paises",
-        "Agregar pais",
-        "Modificar pais",
-        "Eliminar pais",
-        "Buscar paises",
-        "Filtrar paises",
-        "Ordenar paises",
-        "Estadisticas",
-        "Guardar cambios",
-        "Salir",
-    ]
-
-    if questionary is None:
-        print("Falta instalar questionary. Ejecute: pip install -r requirements.txt")
-        return "Salir"
+    opciones = list(OPCIONES_MENU.keys()) + [OPCION_SALIR]
 
     return questionary.select("Seleccione una opcion:", choices=opciones).ask()
-
