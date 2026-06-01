@@ -1,4 +1,5 @@
 from utils import mostrar_funcion_pendiente, mostrar_titulo
+import csv
 
 
 RUTA_ARCHIVO = "paises.csv"
@@ -6,8 +7,29 @@ CAMPOS_PAIS = ["nombre", "poblacion", "superficie", "continente"]
 
 
 def cargar_paises():
-    mostrar_funcion_pendiente("cargar_paises")
-    return []
+    paises = []
+    try:
+        with open(
+            "paises.csv",
+            mode="r",
+            encoding="utf-8"
+        ) as archivo:
+            lector = csv.DictReader(archivo)
+            for fila in lector:
+                pais = {
+                    "nombre": fila["nombre"],
+                    "poblacion": int(fila["poblacion"]),
+                    "superficie": int(fila["superficie"]),
+                    "continente": fila["continente"]
+                }
+                paises.append(pais)
+    except FileNotFoundError:
+        print("Error: no se encontró el archivo paises.csv")
+    except KeyError:
+        print("Error: el formato del CSV es incorrecto")
+    except ValueError:
+        print("Error: hay datos numéricos inválidos en el CSV")
+    return paises
 
 
 def guardar_paises(paises):
