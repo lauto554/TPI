@@ -1,21 +1,69 @@
-from utils import mostrar_funcion_pendiente
+try:
+    import questionary
+except ImportError:
+    questionary = None
+
+
+from utils import mostrar_resultados, limpiar_consola, mostrar_titulo, pausar
 
 
 def ordenar_paises(paises):
-    mostrar_funcion_pendiente("ordenar_paises")
+    while True:
+        limpiar_consola()
+        mostrar_titulo("Ordenar Paises")
+        opcion = questionary.select(
+            "Seleccione un ordenamiento:",
+            choices = [
+                "Por nombre",
+                "Por población",
+                "Por superficie",
+                "Volver"
+            ]
+        ).ask()
+        if opcion == "Volver":
+            break
+        descendente = elegir_orden()
+        if opcion == "Por nombre":
+            resultados = ordenar_por_nombre(paises, descendente)
+        elif opcion == "Por población":
+            resultados = ordenar_por_poblacion(paises, descendente)
+        elif opcion == "Por superficie":
+            resultados = ordenar_por_superficie(paises, descendente)
+        mostrar_resultados(resultados)
+        pausar()
 
 
-def ordenar_por_nombre(paises):
-    mostrar_funcion_pendiente("ordenar_por_nombre")
-    return paises
+def ordenar_por_nombre(paises, descendente=False):
+    return sorted(
+        paises,
+        key=lambda pais: pais["nombre"].lower(),
+        reverse=descendente
+    )
 
 
-def ordenar_por_poblacion(paises, descendente=True):
-    mostrar_funcion_pendiente("ordenar_por_poblacion")
-    return paises
+def ordenar_por_poblacion(paises, descendente=False):
+    return sorted(
+        paises,
+        key=lambda pais: pais["poblacion"],
+        reverse=descendente
+    )
 
 
-def ordenar_por_superficie(paises, descendente=True):
-    mostrar_funcion_pendiente("ordenar_por_superficie")
-    return paises
+def ordenar_por_superficie(paises, descendente=False):
+    return sorted(
+        paises,
+        key=lambda pais: pais["superficie"],
+        reverse=descendente
+    )
 
+
+
+def elegir_orden():
+    opcion = questionary.select(
+        "Orden:",
+        choices=[
+            "Ascendente",
+            "Descendente"
+        ]
+    ).ask()
+    return opcion == "Descendente"

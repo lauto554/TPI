@@ -53,3 +53,17 @@ def pedir_rango(mensaje_min, mensaje_max):
             return minimo, maximo
         except ValueError as e:
             print(f"\nERROR: {e}")
+
+
+def mostrar_resultados(resultados):
+    if not resultados:
+        print("\nNo se encontraron paises")
+        return
+    print()
+    for pais in resultados:
+        print(
+            f"{pais['nombre']} | "
+            f"{pais['continente']} | "
+            f"{pais['poblacion']} habitantes | "
+            f"{pais['superficie']} km²"
+        )

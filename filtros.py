@@ -3,21 +3,7 @@ try:
 except ImportError:
     questionary = None
 
-from utils import mostrar_funcion_pendiente, mostrar_titulo, limpiar_consola, pedir_int, pedir_rango, pedir_texto, pausar
-
-
-def mostrar_resultados(resultados):
-    if not resultados:
-        print("\nNo se encontraron paises")
-        return
-    print()
-    for pais in resultados:
-        print(
-            f"{pais['nombre']} | "
-            f"{pais['continente']} | "
-            f"{pais['poblacion']} habitantes | "
-            f"{pais['superficie']} km²"
-        )
+from utils import mostrar_funcion_pendiente, mostrar_titulo, limpiar_consola, pedir_rango, pedir_texto, pausar, mostrar_resultados
 
 
 def filtrar_paises(paises):
