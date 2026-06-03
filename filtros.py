@@ -6,6 +6,34 @@ except ImportError:
 from utils import mostrar_funcion_pendiente, mostrar_titulo, limpiar_consola, pedir_rango, pedir_texto, pausar, mostrar_resultados
 
 
+def buscar_paises(paises):
+    mostrar_funcion_pendiente("buscar_paises")
+
+
+def filtrar_por_continente(paises, continente):
+    resultado = []
+    for pais in paises:
+        if pais["continente"].lower() == continente.lower():
+            resultado.append(pais)
+    return resultado
+
+
+def filtrar_por_poblacion(paises, poblacion_minima, poblacion_maxima):
+    resultados = []
+    for pais in paises:
+        if poblacion_minima <= pais['poblacion'] <= poblacion_maxima:
+            resultados.append(pais)
+    return resultados
+
+
+def filtrar_por_superficie(paises, superficie_minima, superficie_maxima):
+    resultados = []
+    for pais in paises:
+        if superficie_minima <= pais['superficie'] <= superficie_maxima:
+            resultados.append(pais)
+    return resultados
+
+
 def filtrar_paises(paises):
     while True:
         limpiar_consola()
@@ -34,32 +62,3 @@ def filtrar_paises(paises):
             resultados = filtrar_por_superficie(paises, minimo, maximo)
             mostrar_resultados(resultados)
         pausar()
-
-
-def buscar_paises(paises):
-    mostrar_funcion_pendiente("buscar_paises")
-
-
-def filtrar_por_continente(paises, continente):
-    resultado = []
-    for pais in paises:
-        if pais["continente"].lower() == continente.lower():
-            resultado.append(pais)
-    return resultado
-
-
-def filtrar_por_poblacion(paises, poblacion_minima, poblacion_maxima):
-    resultados = []
-    for pais in paises:
-        if poblacion_minima <= pais['poblacion'] <= poblacion_maxima:
-            resultados.append(pais)
-    return resultados
-
-
-def filtrar_por_superficie(paises, superficie_minima, superficie_maxima):
-    resultados = []
-    for pais in paises:
-        if superficie_minima <= pais['superficie'] <= superficie_maxima:
-            resultados.append(pais)
-    return resultados
-
