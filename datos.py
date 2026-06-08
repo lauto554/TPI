@@ -7,29 +7,7 @@ CAMPOS_PAIS = ["nombre", "poblacion", "superficie", "continente"]
 
 
 def cargar_paises():
-    paises = []
-    try:
-        with open(
-            "paises.csv",
-            mode="r",
-            encoding="utf-8"
-        ) as archivo:
-            lector = csv.DictReader(archivo)
-            for fila in lector:
-                pais = {
-                    "nombre": fila["nombre"],
-                    "poblacion": int(fila["poblacion"]),
-                    "superficie": int(fila["superficie"]),
-                    "continente": fila["continente"]
-                }
-                paises.append(pais)
-    except FileNotFoundError:
-        print("Error: no se encontró el archivo paises.csv")
-    except KeyError:
-        print("Error: el formato del CSV es incorrecto")
-    except ValueError:
-        print("Error: hay datos numéricos inválidos en el CSV")
-    return paises
+    return 
 
 
 def guardar_paises(paises):
