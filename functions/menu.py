@@ -3,11 +3,11 @@ try:
 except ImportError:
     questionary = None
 
-from datos import agregar_pais, cargar_paises, eliminar_pais, guardar_paises, listar_paises, modificar_pais
-from estadisticas import mostrar_estadisticas
-from filtros import buscar_paises, filtrar_paises
-from ordenamientos import ordenar_paises
-from utils import limpiar_consola, mostrar_titulo, pausar
+from functions.datos import agregar_pais, buscar_pais, cargar_paises, eliminar_pais, guardar_paises, listar_paises, modificar_pais
+from functions.estadisticas import mostrar_estadisticas
+from functions.filtros import filtrar_paises
+from functions.ordenamientos import ordenar_paises
+from functions.utils import limpiar_consola, mostrar_titulo, pausar
 
 
 OPCIONES_MENU = {
@@ -15,11 +15,10 @@ OPCIONES_MENU = {
     "Agregar pais": agregar_pais,
     "Modificar pais": modificar_pais,
     "Eliminar pais": eliminar_pais,
-    "Buscar paises": buscar_paises,
+    "Buscar pais": buscar_pais,
     "Filtrar paises": filtrar_paises,
     "Ordenar paises": ordenar_paises,
     "Estadisticas": mostrar_estadisticas,
-    "Guardar cambios": guardar_paises,
 }
 
 OPCION_SALIR = "Salir"
@@ -47,8 +46,9 @@ def ejecutar_menu():
             break
 
         funcion = OPCIONES_MENU[opcion]
-        funcion(paises)
-        pausar()
+        ir_al_menu = funcion(paises)
+        if ir_al_menu is not True:
+            pausar()
 
 
 def seleccionar_opcion():

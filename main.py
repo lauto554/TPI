@@ -1,4 +1,4 @@
-from menu import ejecutar_menu
+from functions.menu import ejecutar_menu
 
 
 def main():
@@ -7,5 +7,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

@@ -4,7 +4,7 @@ except ImportError:
     questionary = None
 
 
-from utils import mostrar_resultados, limpiar_consola, mostrar_titulo, pausar
+from functions.utils import mostrar_resultados, limpiar_consola, mostrar_titulo, pausar
 
 
 def ordenar_por_nombre(paises, descendente=False):

@@ -3,11 +3,7 @@ try:
 except ImportError:
     questionary = None
 
-from utils import mostrar_funcion_pendiente, mostrar_titulo, limpiar_consola, pedir_rango, pedir_texto, pausar, mostrar_resultados
-
-
-def buscar_paises(paises):
-    mostrar_funcion_pendiente("buscar_paises")
+from functions.utils import mostrar_titulo, limpiar_consola, pedir_rango, pedir_texto, pausar, mostrar_resultados
 
 
 def filtrar_por_continente(paises, continente):

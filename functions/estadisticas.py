@@ -4,7 +4,7 @@ except ImportError:
     questionary = None
 
 
-from utils import limpiar_consola, pausar, mostrar_titulo
+from functions.utils import limpiar_consola, pausar, mostrar_titulo
 
 def mayor_poblacion(paises):
     return max(
