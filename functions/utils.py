@@ -1,12 +1,16 @@
 import os
 import unicodedata
 import questionary
+from rich.console import Console
+from functions.estilos import ESTILO_MENU, mostrar_tabla_paises
+
+console = Console()
 
 CONTINENTES_VALIDOS = ["Africa", "America", "Asia", "Europa", "Oceania", "Antartida"]
 
 def lista_vacia(paises):
     if not paises:
-        print("No hay paises cargados.")
+        console.print("[bold red]No hay paises cargados.[bold red]")
         return True
     return False
 
@@ -19,29 +23,6 @@ def pausar():
 def formatear_texto(texto):
     return unicodedata.normalize("NFD", texto).encode("ascii", "ignore").decode("ascii")
 
-def mostrar_titulo(titulo):
-    print("=" * 50)
-    print(titulo)
-    print("=" * 50)
-
-def mostrar_exito(mensaje):
-    linea = "═" * (len(mensaje) + 4)
-    print(f"\n╔{linea}╗")
-    print(f"║  {mensaje}  ║")
-    print(f"╚{linea}╝\n")
-
-def pedir_int(mensaje):
-    while True:
-        try:
-            dato = input(mensaje.strip())
-            if not dato:
-                raise ValueError("El campo no puede estar vacio")
-            if int(dato) < 0:
-                raise ValueError("Debe ser mayor que 0")
-            return int(dato)
-        except ValueError as e:
-            print(f"\nERROR: {e}")
-
 def pedir_entero_positivo(mensaje, opcional=False, max_intentos=None):
     intentos = 0
 
@@ -51,9 +32,9 @@ def pedir_entero_positivo(mensaje, opcional=False, max_intentos=None):
         if not dato:
             if opcional:
                 return None
-            print("El campo no puede estar vacio.")
+            console.print("[bold red]El campo no puede estar vacio.[bold red]")
         elif not dato.isdigit() or int(dato) <= 0:
-            print("Debe ingresar un numero entero mayor a 0.")
+            console.print("[bold red]Debe ingresar un numero entero mayor a 0.[bold red]")
         else:
             return int(dato)
 
@@ -61,7 +42,7 @@ def pedir_entero_positivo(mensaje, opcional=False, max_intentos=None):
             intentos += 1
             
             if intentos >= max_intentos:
-                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["Si", "No"]).ask() == "Si":
+                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["✅ Si", "❌​ No"], style= ESTILO_MENU).ask() == "✅ Si":
                     return None
                 intentos = 0
 
@@ -72,9 +53,9 @@ def pedir_nombre(mensaje, max_intentos=None):
         valor = input(mensaje).strip()
 
         if not valor:
-            print("El campo no puede estar vacio.")
+            console.print("[bold red]El campo no puede estar vacio.[bold red]")
         elif any(c.isdigit() for c in valor):
-            print("El nombre no puede contener numeros.")
+            console.print("[bold red]El nombre no puede contener numeros.[bold red]")
         else:
             return valor
 
@@ -82,7 +63,7 @@ def pedir_nombre(mensaje, max_intentos=None):
             intentos += 1
 
             if intentos >= max_intentos:
-                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["Si", "No"]).ask() == "Si":
+                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["✅ Si", "❌​ No"], style= ESTILO_MENU).ask() == "✅ Si":
                     return None
                 intentos = 0
 
@@ -99,34 +80,26 @@ def pedir_continente(mensaje, opcional=False):
     if opcional:
         choices.insert(0, "(No modificar)") # lo inserto al principio para que sea la primera opcion
 
-    seleccion = questionary.select(mensaje, choices=choices).ask()
+    seleccion = questionary.select(mensaje, choices=choices, style= ESTILO_MENU).ask()
 
     if seleccion == "(No modificar)":
         return None
     return seleccion
 
-
-def pedir_texto(mensaje):
-    while True:
-        try: 
-            texto = input(mensaje).strip()
-            if not texto:
-                raise ValueError("El campo no puede estar vacio")
-            return texto
-        except ValueError as e:
-            print(f"\nERROR: {e}")
-
-
 def pedir_rango(mensaje_min, mensaje_max):
     while True:
         try:
-            minimo = pedir_int(mensaje_min)
-            maximo = pedir_int(mensaje_max)
+            minimo = pedir_entero_positivo(mensaje_min, opcional= False, max_intentos= 3)
+            if minimo is None:
+                return None
+            maximo = pedir_entero_positivo(mensaje_max, opcional= False, max_intentos= 3)
+            if maximo is None:
+                return None
             if minimo > maximo:
                 raise ValueError("El minimo no puede ser superior al maximo")
             return minimo, maximo
         except ValueError as e:
-            print(f"\nERROR: {e}")
+            console.print(f"[bold red]\nERROR: {e}[bold red]")
 
 
 def mostrar_resultados(resultados):
@@ -134,10 +107,4 @@ def mostrar_resultados(resultados):
         print("\nNo se encontraron paises")
         return
     print()
-    for pais in resultados:
-        print(
-            f"{pais['nombre']} | "
-            f"{pais['continente']} | "
-            f"{pais['poblacion']} habitantes | "
-            f"{pais['superficie']} km²"
-        )
+    mostrar_tabla_paises(resultados)

@@ -2,9 +2,11 @@ try:
     import questionary
 except ImportError:
     questionary = None
+from rich.console import Console
+from functions.utils import limpiar_consola, pausar
+from functions.estilos import mostrar_titulo, ESTILO_MENU, mostrar_tabla_paises
 
-
-from functions.utils import limpiar_consola, pausar, mostrar_titulo
+console = Console()
 
 def mayor_poblacion(paises):
     return max(
@@ -45,38 +47,50 @@ def contar_por_continente(paises):
 
 
 def mostrar_estadisticas(paises):
+    if not paises:
+        limpiar_consola()
+        mostrar_titulo("Estadisticas")
+        console.print("[yellow bold]No hay datos de países cargados para calcular estadísticas.[yellow bold]")
+        pausar()
+        return
     while True:
         limpiar_consola()
         mostrar_titulo("Estadisticas")
         opcion = questionary.select(
             "Seleccione una estadistica:",
             choices = [
-                "Pais con mayor población",
-                "Pais con menor población",
-                "Promedio de población",
-                "Promedio de superficie",
-                "Cantidad de paises por continente",
-                "Volver"
-            ]
+                "📈 Pais con mayor población",
+                "📉 Pais con menor población",
+                "👥 Promedio de población",
+                "📐 Promedio de superficie",
+                "🗺️ Cantidad de paises por continente",
+                "🔙 Volver"
+            ], style= ESTILO_MENU
         ).ask()
-        if opcion == "Volver":
+        if opcion == "🔙 Volver":
             break
-        elif opcion == "Pais con mayor población":
+        elif opcion == "📈 Pais con mayor población":
             pais = mayor_poblacion(paises)
-            print(f"\nPais: {pais['nombre']}")
-            print(f"Poblacion: {pais['poblacion']}")
-        elif opcion == "Pais con menor población":
+            mostrar_tabla_paises([pais])
+        elif opcion == "📉 Pais con menor población":
             pais = menor_poblacion(paises)
-            print(f"\nPais: {pais['nombre']}")
-            print(f"Poblacion: {pais['poblacion']}")
-        elif opcion == "Promedio de población":
+            mostrar_tabla_paises([pais])
+        elif opcion == "👥 Promedio de población":
             promedio = calcular_promedio_poblacion(paises)
             print(f"\nPromedio de población: {promedio:.2f}")
-        elif opcion == "Promedio de superficie":
+        elif opcion == "📐 Promedio de superficie":
             promedio = calcular_promedio_superficie(paises)
             print(f"\nPromedio de superficie: {promedio:.2f}")
-        elif opcion == "Cantidad de paises por continente":
+        elif opcion == "🗺️ Cantidad de paises por continente":
+            print("\nConteo de países por continente:")
             cantidades = contar_por_continente(paises)
+            filas_continentes = []
             for continente, cantidad in cantidades.items():
-                print(f"{continente}: {cantidad}")
+                filas_continentes.append({
+                    "nombre": f"Total {continente}",
+                    "poblacion": cantidad,
+                    "superficie": 0,
+                    "continente": continente
+                })
+            mostrar_tabla_paises(filas_continentes)
         pausar()

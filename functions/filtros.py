@@ -2,9 +2,11 @@ try:
     import questionary
 except ImportError:
     questionary = None
+from rich.console import Console
+from functions.utils import limpiar_consola, pedir_rango, pausar, mostrar_resultados, pedir_continente
+from functions.estilos import mostrar_titulo, ESTILO_MENU
 
-from functions.utils import mostrar_titulo, limpiar_consola, pedir_rango, pedir_texto, pausar, mostrar_resultados
-
+console = Console
 
 def filtrar_por_continente(paises, continente):
     resultado = []
@@ -31,30 +33,42 @@ def filtrar_por_superficie(paises, superficie_minima, superficie_maxima):
 
 
 def filtrar_paises(paises):
+    if not paises:
+        limpiar_consola()
+        mostrar_titulo("Filtrar Paises")
+        console.print("[yellow bold]No hay datos de países cargados para calcular estadísticas.[yellow bold]")
+        pausar()
+        return
     while True:
         limpiar_consola()
         mostrar_titulo("Filtrar Paises")
         opcion = questionary.select(
             "Seleccione un filtro:",
             choices = [
-                "Por continente",
-                "Por población",
-                "Por superficie",
-                "Volver"
-            ]
+                "🗺️  Por continente",
+                "👥 Por población",
+                "📐 Por superficie",
+                "🔙 Volver"
+            ], style= ESTILO_MENU
         ).ask()
-        if opcion == "Volver":
+        if opcion == "🔙 Volver":
             break
-        elif opcion == "Por continente":
-            continente = pedir_texto("Ingrese el continente: ")
+        elif opcion == "🗺️  Por continente":
+            continente = pedir_continente("Ingrese el continente: ")
             resultados = filtrar_por_continente(paises, continente)
             mostrar_resultados(resultados)
-        elif opcion == "Por población":
-            minimo, maximo = pedir_rango("Población minima: ", "Población maxima: ")
+        elif opcion == "👥 Por población":
+            rango = pedir_rango("Población minima: ", "Población maxima: ")
+            if rango is None:
+                continue
+            minimo, maximo = rango
             resultados = filtrar_por_poblacion(paises, minimo, maximo)
             mostrar_resultados(resultados)
-        elif opcion == "Por superficie":
-            minimo, maximo = pedir_rango("Superficie minima: ", "Superficie maxima: ")
+        elif opcion == "📐 Por superficie":
+            rango = pedir_rango("Superficie minima: ", "Superficie maxima: ")
+            if rango is None:
+                continue
+            minimo, maximo = rango
             resultados = filtrar_por_superficie(paises, minimo, maximo)
             mostrar_resultados(resultados)
         pausar()

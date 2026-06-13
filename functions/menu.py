@@ -7,26 +7,29 @@ from functions.datos import agregar_pais, buscar_pais, cargar_paises, eliminar_p
 from functions.estadisticas import mostrar_estadisticas
 from functions.filtros import filtrar_paises
 from functions.ordenamientos import ordenar_paises
-from functions.utils import limpiar_consola, mostrar_titulo, pausar
+from functions.utils import limpiar_consola, pausar
+from functions.estilos import mostrar_titulo, ESTILO_MENU
+from rich.console import Console
 
+console = Console()
 
 OPCIONES_MENU = {
-    "Listar paises": listar_paises,
-    "Agregar pais": agregar_pais,
-    "Modificar pais": modificar_pais,
-    "Eliminar pais": eliminar_pais,
-    "Buscar pais": buscar_pais,
-    "Filtrar paises": filtrar_paises,
-    "Ordenar paises": ordenar_paises,
-    "Estadisticas": mostrar_estadisticas,
+    "🌎​ Listar paises": listar_paises,
+    "➕ Agregar pais": agregar_pais,
+    "✍️​  Modificar pais": modificar_pais,
+    "❌​ Eliminar pais": eliminar_pais,
+    "🔍​ Buscar pais": buscar_pais,
+    "🌪️  Filtrar paises": filtrar_paises,
+    "🔀 Ordenar paises": ordenar_paises,
+    "📊 Estadisticas": mostrar_estadisticas,
 }
 
-OPCION_SALIR = "Salir"
+OPCION_SALIR = "🚪 Salir"
 
 
 def ejecutar_menu():
     if questionary is None:
-        print("Falta instalar questionary. Ejecute: pip install -r requirements.txt")
+        console.print("[yellow bold]Falta instalar questionary. Ejecute: pip install -r requirements.txt[yellow bold]")
         pausar()
         return
 
@@ -42,7 +45,7 @@ def ejecutar_menu():
 
         if opcion == OPCION_SALIR:
             guardar_paises(paises)
-            print("Programa finalizado.")
+            console.print("\n[blue bold]PROGRAMA FINALIZADO.[blue bold]\n")
             break
 
         funcion = OPCIONES_MENU[opcion]
@@ -53,5 +56,4 @@ def ejecutar_menu():
 
 def seleccionar_opcion():
     opciones = list(OPCIONES_MENU.keys()) + [OPCION_SALIR]
-
-    return questionary.select("Seleccione una opcion:", choices=opciones).ask()
+    return questionary.select("Seleccione una opcion:", choices=opciones, style= ESTILO_MENU).ask()

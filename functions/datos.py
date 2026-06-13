@@ -1,9 +1,11 @@
 import csv
 import unicodedata
-
 import questionary
-from functions.utils import lista_vacia, mostrar_exito, mostrar_titulo, formatear_texto, buscar_por_nombre_exacto, pedir_nombre, pedir_continente, pedir_entero_positivo
+from functions.utils import lista_vacia, formatear_texto, buscar_por_nombre_exacto, pedir_nombre, pedir_continente, pedir_entero_positivo
+from functions.estilos import mostrar_titulo, ESTILO_MENU, mostrar_tabla_paises
+from rich.console import Console
 
+console = Console()
 
 RUTA_ARCHIVO = "paises.csv"
 CAMPOS_PAIS = ["nombre", "poblacion", "superficie", "continente"]
@@ -24,9 +26,9 @@ def cargar_paises():
                 }
                 paises.append(pais)
     except FileNotFoundError:
-        print("Archivo CSV no encontrado. Se inicia con lista vacia.")
+        console.print("[yellow bold]Archivo CSV no encontrado. Se inicia con lista vacia.[yellow bold]")
     except (KeyError, ValueError) as e:
-        print(f"Error al leer el CSV: {e}")
+        console.print(f"[red bold]Error al leer el CSV: {e}[red bold]")
     return paises
 
 
@@ -44,26 +46,15 @@ def guardar_paises(paises):
                 }
                 escritor.writerow(fila)
     except IOError as e:
-        print(f"Error al guardar el archivo: {e}")
+        console.print(f"[red bold]Error al guardar el archivo: {e}[red bold]")
 
 
 ########################## ABM #########################
 def listar_paises(paises):
     mostrar_titulo("Listado de paises")
-
     if lista_vacia(paises):
         return
-
-    print(f"{'Pais':<25} {'Poblacion':>15} {'Superficie (km2)':>20}   {'Continente':<15}")
-    print("-" * 80)
-    for pais in paises:
-        print(
-            f"{pais['nombre']:<25} "
-            f"{pais['poblacion']:>15,} "
-            f"{pais['superficie']:>20,}   "
-            f"{pais['continente']:<15}"
-        )
-    print(f"\nTotal: {len(paises)} pais/es.")
+    mostrar_tabla_paises(paises)
 
 
 def agregar_pais(paises):
@@ -75,7 +66,7 @@ def agregar_pais(paises):
     nombre = formatear_texto(resultado).title()
 
     if buscar_por_nombre_exacto(nombre, paises) is not None:
-        print(f"Ya existe un pais en la base de datos con el nombre '{nombre}'.")
+        console.print(f"[yellow bold]Ya existe un pais en la base de datos con el nombre '{nombre}'.[yellow bold]")
         return
 
     poblacion = pedir_entero_positivo("Poblacion: ", max_intentos=3)
@@ -98,7 +89,7 @@ def agregar_pais(paises):
     }
     paises.append(pais)
     guardar_paises(paises)
-    mostrar_exito(f"Pais '{nombre}' agregado correctamente.")
+    mostrar_titulo(f"Pais '{nombre}' agregado correctamente.")
 
 
 def modificar_pais(paises):
@@ -112,12 +103,10 @@ def modificar_pais(paises):
         return True
     pais = buscar_por_nombre_exacto(nombre, paises)
     if pais is None:
-        print(f"No se encontro el pais '{nombre}'.")
+        console.print(f"[yellow bold]No se encontro el pais '{nombre}'.[yellow bold]")
         return
 
-    print(f"\n{'Nombre':<25} {'Poblacion':>15} {'Superficie (km2)':>20}   {'Continente':<15}")
-    print("-" * 80)
-    print(f"{pais['nombre']:<25} {pais['poblacion']:>15,} {pais['superficie']:>20,}   {pais['continente']:<15}")
+    mostrar_tabla_paises([pais])
     print()
 
     nueva_poblacion = pedir_entero_positivo("Nueva poblacion (dejar vacío para no modificar): ", opcional=True)
@@ -125,7 +114,7 @@ def modificar_pais(paises):
     nuevo_continente = pedir_continente("Nuevo continente (dejar vacío para no modificar): ", opcional=True)
 
     if nueva_poblacion is None and nueva_superficie is None and nuevo_continente is None:
-        print("No se realizaron cambios.")
+        console.print("[yellow bold]No se realizaron cambios.[yellow bold]")
         return
 
     if nueva_poblacion is not None:
@@ -136,7 +125,7 @@ def modificar_pais(paises):
         pais["continente"] = nuevo_continente
 
     guardar_paises(paises)
-    mostrar_exito(f"Pais '{pais['nombre']}' modificado correctamente.")
+    mostrar_titulo(f"Pais '{pais['nombre']}' modificado correctamente.")
 
 
 def eliminar_pais(paises):
@@ -151,15 +140,15 @@ def eliminar_pais(paises):
 
     pais = buscar_por_nombre_exacto(nombre, paises)
     if pais is None:
-        print(f"No se encontro el pais '{nombre}'.")
+        console.print(f"[yellow bold]No se encontro el pais '{nombre}'.[yellow bold]")
         return
 
-    if questionary.select(f"Confirma eliminar '{pais['nombre']}'?", choices=["No", "Si"]).ask() == "Si":
+    if questionary.select(f"Confirma eliminar '{pais['nombre']}'?", choices=["❌ No", "✅ Si"], style= ESTILO_MENU).ask() == "✅ Si":
         paises.remove(pais)
         guardar_paises(paises)
-        mostrar_exito(f"Pais '{pais['nombre']}' eliminado correctamente.")
+        mostrar_titulo(f"Pais '{pais['nombre']}' eliminado correctamente.")
     else:
-        print("Operacion cancelada.")
+        console.print("[green bold]Operacion cancelada.[green bold]")
 
 
 def buscar_pais(paises):
@@ -176,16 +165,7 @@ def buscar_pais(paises):
     resultados = [p for p in paises if termino_norm in formatear_texto(p["nombre"].lower())]
 
     if not resultados:
-        print(f"No se encontraron paises con '{termino}'.")
+        console.print(f"[yellow bold]No se encontraron paises con '{termino}'.[yellow bold]")
         return
-
-    print(f"\n{'Nombre':<25} {'Poblacion':>15}   {'Superficie (km2)':>18}   {'Continente':<15}")
-    print("-" * 80)
-    for pais in resultados:
-        print(
-            f"{pais['nombre']:<25} "
-            f"{pais['poblacion']:>15,} "
-            f"{pais['superficie']:>20,}   "
-            f"{pais['continente']:<15}"
-        )
-    print(f"\n{len(resultados)} resultado/s.")
+    print(f"\nResultados de la busqueda:")
+    mostrar_tabla_paises(resultados)
