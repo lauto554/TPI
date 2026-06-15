@@ -1,7 +1,4 @@
-try:
-    import questionary
-except ImportError:
-    questionary = None
+import questionary
 
 from functions.datos import agregar_pais, buscar_pais, cargar_paises, eliminar_pais, guardar_paises, listar_paises, modificar_pais
 from functions.estadisticas import mostrar_estadisticas
@@ -28,11 +25,6 @@ OPCION_SALIR = "🚪 Salir"
 
 
 def ejecutar_menu():
-    if questionary is None:
-        console.print("[yellow bold]Falta instalar questionary. Ejecute: pip install -r requirements.txt[yellow bold]")
-        pausar()
-        return
-
     paises = cargar_paises()
 
     while True:
@@ -41,12 +33,14 @@ def ejecutar_menu():
 
         opcion = seleccionar_opcion()
 
-        limpiar_consola()
 
         if opcion == OPCION_SALIR:
             guardar_paises(paises)
             console.print("\n[blue bold]PROGRAMA FINALIZADO.[blue bold]\n")
             break
+
+        limpiar_consola()
+
 
         funcion = OPCIONES_MENU[opcion]
         ir_al_menu = funcion(paises)

@@ -2,15 +2,16 @@ import os
 import unicodedata
 import questionary
 from rich.console import Console
-from functions.estilos import ESTILO_MENU, mostrar_tabla_paises
+from functions.estilos import ESTILO_MENU, mostrar_tabla_paises, mostrar_rango_busqueda
 
 console = Console()
 
 CONTINENTES_VALIDOS = ["Africa", "America", "Asia", "Europa", "Oceania", "Antartida"]
 
-def lista_vacia(paises):
-    if not paises:
-        console.print("[bold red]No hay paises cargados.[bold red]")
+def lista_vacia(lista):
+    if not lista:
+        console.print("[yellow bold]No hay datos de países cargados para esta operacion.[yellow bold]")
+        console.print("Por favor, cargue paises en la seccion de 'Agregar pais'")
         return True
     return False
 
@@ -23,7 +24,19 @@ def pausar():
 def formatear_texto(texto):
     return unicodedata.normalize("NFD", texto).encode("ascii", "ignore").decode("ascii")
 
-def pedir_entero_positivo(mensaje, opcional=False, max_intentos=None):
+def manejar_max_intentos(intentos, max_intentos=3):
+    intentos += 1
+    if intentos < max_intentos:
+        return intentos, False
+    if questionary.select(
+        "Demasiados intentos. Desea volver al menu?",
+        choices=["✅ Si", "❌​ No"],
+        style=ESTILO_MENU,
+    ).ask() == "✅ Si":
+        return 0, True
+    return 0, False
+
+def pedir_entero_positivo(mensaje, opcional=False):
     intentos = 0
 
     while True:
@@ -38,15 +51,11 @@ def pedir_entero_positivo(mensaje, opcional=False, max_intentos=None):
         else:
             return int(dato)
 
-        if max_intentos is not None:
-            intentos += 1
-            
-            if intentos >= max_intentos:
-                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["✅ Si", "❌​ No"], style= ESTILO_MENU).ask() == "✅ Si":
-                    return None
-                intentos = 0
+        intentos, volver = manejar_max_intentos(intentos)
+        if volver:
+            return None
 
-def pedir_nombre(mensaje, max_intentos=None):
+def pedir_nombre(mensaje):
     intentos = 0
 
     while True:
@@ -59,13 +68,9 @@ def pedir_nombre(mensaje, max_intentos=None):
         else:
             return valor
 
-        if max_intentos is not None:
-            intentos += 1
-
-            if intentos >= max_intentos:
-                if questionary.select("Demasiados intentos. Desea volver al menu?", choices=["✅ Si", "❌​ No"], style= ESTILO_MENU).ask() == "✅ Si":
-                    return None
-                intentos = 0
+        intentos, volver = manejar_max_intentos(intentos)
+        if volver:
+            return None
 
 def buscar_por_nombre_exacto(nombre, paises):
     nombre_formateado = formatear_texto(nombre.lower())
@@ -78,7 +83,7 @@ def buscar_por_nombre_exacto(nombre, paises):
 def pedir_continente(mensaje, opcional=False):
     choices = CONTINENTES_VALIDOS.copy()  # copia para no modificar la lista original
     if opcional:
-        choices.insert(0, "(No modificar)") # lo inserto al principio para que sea la primera opcion
+        choices.insert(0, "(No modificar)") # lo inserta al principio para que sea la primera opcion 
 
     seleccion = questionary.select(mensaje, choices=choices, style= ESTILO_MENU).ask()
 
@@ -89,10 +94,10 @@ def pedir_continente(mensaje, opcional=False):
 def pedir_rango(mensaje_min, mensaje_max):
     while True:
         try:
-            minimo = pedir_entero_positivo(mensaje_min, opcional= False, max_intentos= 3)
+            minimo = pedir_entero_positivo(mensaje_min)
             if minimo is None:
                 return None
-            maximo = pedir_entero_positivo(mensaje_max, opcional= False, max_intentos= 3)
+            maximo = pedir_entero_positivo(mensaje_max)
             if maximo is None:
                 return None
             if minimo > maximo:
@@ -101,10 +106,12 @@ def pedir_rango(mensaje_min, mensaje_max):
         except ValueError as e:
             console.print(f"[bold red]\nERROR: {e}[bold red]")
 
-
-def mostrar_resultados(resultados):
+def mostrar_resultados(resultados, etiqueta_rango=None, minimo=None, maximo=None, unidad="", mensaje_vacio=None):
+    if etiqueta_rango is not None:
+        mostrar_rango_busqueda(etiqueta_rango, minimo, maximo, unidad)
     if not resultados:
-        print("\nNo se encontraron paises")
+        mensaje = mensaje_vacio or "No se encontraron paises."
+        console.print(f"\n[yellow bold]{mensaje}[/yellow bold]")
         return
-    print()
+    console.print()
     mostrar_tabla_paises(resultados)

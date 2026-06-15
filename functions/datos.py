@@ -1,5 +1,4 @@
 import csv
-import unicodedata
 import questionary
 from functions.utils import lista_vacia, formatear_texto, buscar_por_nombre_exacto, pedir_nombre, pedir_continente, pedir_entero_positivo
 from functions.estilos import mostrar_titulo, ESTILO_MENU, mostrar_tabla_paises
@@ -60,7 +59,7 @@ def listar_paises(paises):
 def agregar_pais(paises):
     mostrar_titulo("Agregar pais")
 
-    resultado = pedir_nombre("Nombre del pais: ", max_intentos=3)
+    resultado = pedir_nombre("Nombre del pais: ")
     if resultado is None:
         return True
     nombre = formatear_texto(resultado).title()
@@ -69,11 +68,11 @@ def agregar_pais(paises):
         console.print(f"[yellow bold]Ya existe un pais en la base de datos con el nombre '{nombre}'.[yellow bold]")
         return
 
-    poblacion = pedir_entero_positivo("Poblacion: ", max_intentos=3)
+    poblacion = pedir_entero_positivo("Poblacion: ")
     if poblacion is None:
         return True
 
-    superficie = pedir_entero_positivo("Superficie (km2): ", max_intentos=3)
+    superficie = pedir_entero_positivo("Superficie (km2): ")
     if superficie is None:
         return True
 
@@ -98,7 +97,7 @@ def modificar_pais(paises):
     if lista_vacia(paises):
         return
 
-    nombre = pedir_nombre("Nombre del pais a modificar: ", max_intentos=3)
+    nombre = pedir_nombre("Nombre del pais a modificar: ")
     if nombre is None:
         return True
     pais = buscar_por_nombre_exacto(nombre, paises)
@@ -134,7 +133,7 @@ def eliminar_pais(paises):
     if lista_vacia(paises):
         return
 
-    nombre = pedir_nombre("Nombre del pais a eliminar: ", max_intentos=3)
+    nombre = pedir_nombre("Nombre del pais a eliminar: ")
     if nombre is None:
         return True
 
@@ -157,7 +156,11 @@ def buscar_pais(paises):
     if lista_vacia(paises):
         return
 
-    termino = pedir_nombre("Nombre a buscar: ", max_intentos=3)
+    console.print(
+        "[dim]Se mostraran todos los paises cuyo nombre contenga el texto que ingrese. "
+        "No hace falta escribir el nombre completo.[/dim]\n"
+    )
+    termino = pedir_nombre("Nombre a buscar: ")
     if termino is None:
         return True
 

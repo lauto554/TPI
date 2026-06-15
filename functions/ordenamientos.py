@@ -1,10 +1,6 @@
-try:
-    import questionary
-except ImportError:
-    questionary = None
+import questionary
 
-
-from functions.utils import mostrar_resultados, limpiar_consola, pausar
+from functions.utils import mostrar_resultados, limpiar_consola, pausar, lista_vacia
 from functions.estilos import mostrar_titulo, ESTILO_MENU
 
 def ordenar_por_nombre(paises, descendente=False):
@@ -39,10 +35,13 @@ def elegir_orden():
             "⬇️​  Descendente"
         ], style= ESTILO_MENU
     ).ask()
-    return opcion == "Descendente"
+    return "Descendente" in opcion
 
 
 def ordenar_paises(paises):
+    if not paises:
+        lista_vacia(paises)
+        return
     while True:
         limpiar_consola()
         mostrar_titulo("Ordenar Paises")
@@ -56,7 +55,7 @@ def ordenar_paises(paises):
             ], style= ESTILO_MENU
         ).ask()
         if opcion == "🔙 Volver":
-            break
+            return True
         descendente = elegir_orden()
         if opcion == "🔤 Por nombre":
             resultados = ordenar_por_nombre(paises, descendente)
