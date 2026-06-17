@@ -16,7 +16,7 @@
 | Nombre | Legajo | Correo |
 |---|---|---|
 | Lautaro Martinez | 54277 | lautaroj.martinez@alumnos.frm.utn.edu.ar |
-| Luciano Pizarro | — | — |
+| Luciano Pizarro | 54249 | luciano.pizarro@alumnos.frm.utn.edu.ar |
 
 **Fecha de entrega:** `[COMPLETAR]`
 

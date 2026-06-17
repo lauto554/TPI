@@ -13,7 +13,7 @@ El proyecto está organizado en módulos dentro de la carpeta `functions/` para 
 | Nombre | Legajo | Correo |
 |---|---|---|
 | Lautaro Martinez | 54277 | lautaroj.martinez@alumnos.frm.utn.edu.ar |
-| Luciano Pizarro | — | — |
+| Luciano Pizarro | 54249 | luciano.pizarro@alumnos.frm.utn.edu.ar |
 
 ## Enlaces del proyecto
 
