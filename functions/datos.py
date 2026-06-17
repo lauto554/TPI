@@ -6,7 +6,7 @@ from rich.console import Console
 
 console = Console()
 
-RUTA_ARCHIVO = "paises.csv"
+NOMBRE_ARCHIVO = "paises.csv"
 CAMPOS_PAIS = ["nombre", "poblacion", "superficie", "continente"]
 
 
@@ -14,7 +14,7 @@ CAMPOS_PAIS = ["nombre", "poblacion", "superficie", "continente"]
 def cargar_paises():
     paises = []
     try:
-        with open(RUTA_ARCHIVO, newline="", encoding="utf-8") as archivo:
+        with open(NOMBRE_ARCHIVO, newline="", encoding="utf-8") as archivo:
             lector = csv.DictReader(archivo)
             for fila in lector:
                 pais = {
@@ -33,7 +33,7 @@ def cargar_paises():
 
 def guardar_paises(paises):
     try:
-        with open(RUTA_ARCHIVO, "w", newline="", encoding="utf-8") as archivo:
+        with open(NOMBRE_ARCHIVO, "w", newline="", encoding="utf-8") as archivo:
             escritor = csv.DictWriter(archivo, fieldnames=CAMPOS_PAIS)
             escritor.writeheader()
             for pais in paises:
@@ -51,8 +51,10 @@ def guardar_paises(paises):
 ########################## ABM #########################
 def listar_paises(paises):
     mostrar_titulo("Listado de paises")
+
     if lista_vacia(paises):
         return
+
     mostrar_tabla_paises(paises)
 
 
@@ -98,9 +100,12 @@ def modificar_pais(paises):
         return
 
     nombre = pedir_nombre("Nombre del pais a modificar: ")
+
     if nombre is None:
         return True
+
     pais = buscar_por_nombre_exacto(nombre, paises)
+    
     if pais is None:
         console.print(f"[yellow bold]No se encontro el pais '{nombre}'.[yellow bold]")
         return

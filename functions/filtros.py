@@ -30,6 +30,8 @@ def filtrar_por_superficie(paises, superficie_minima, superficie_maxima):
 
 
 def filtrar_paises(paises):
+    mostrar_titulo("Filtrar Paises")
+    
     if not paises:
         lista_vacia(paises)
         return

@@ -41,12 +41,12 @@ def contar_por_continente(paises):
 
 
 def mostrar_estadisticas(paises):
+    mostrar_titulo("Estadisticas")
+    
     if not paises:
         lista_vacia(paises)
         return
     while True:
-        limpiar_consola()
-        mostrar_titulo("Estadisticas")
         opcion = questionary.select(
             "Seleccione una estadistica:",
             choices = [

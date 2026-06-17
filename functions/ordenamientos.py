@@ -39,12 +39,13 @@ def elegir_orden():
 
 
 def ordenar_paises(paises):
+    mostrar_titulo("Ordenar Paises")
+    
     if not paises:
         lista_vacia(paises)
         return
     while True:
-        limpiar_consola()
-        mostrar_titulo("Ordenar Paises")
+        
         opcion = questionary.select(
             "Seleccione un ordenamiento:",
             choices = [

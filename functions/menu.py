@@ -1,6 +1,6 @@
 import questionary
 
-from functions.datos import agregar_pais, buscar_pais, cargar_paises, eliminar_pais, guardar_paises, listar_paises, modificar_pais
+from functions.datos import agregar_pais, buscar_pais, cargar_paises, eliminar_pais, listar_paises, modificar_pais
 from functions.estadisticas import mostrar_estadisticas
 from functions.filtros import filtrar_paises
 from functions.ordenamientos import ordenar_paises
@@ -33,17 +33,15 @@ def ejecutar_menu():
 
         opcion = seleccionar_opcion()
 
-
         if opcion == OPCION_SALIR:
-            guardar_paises(paises)
             console.print("\n[blue bold]PROGRAMA FINALIZADO.[blue bold]\n")
             break
 
         limpiar_consola()
 
-
-        funcion = OPCIONES_MENU[opcion]
-        ir_al_menu = funcion(paises)
+        funcion_menu = OPCIONES_MENU[opcion]
+        ir_al_menu = funcion_menu(paises)
+        
         if ir_al_menu is not True:
             pausar()
 
