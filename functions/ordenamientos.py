@@ -45,7 +45,7 @@ def ordenar_paises(paises):
         lista_vacia(paises)
         return
     while True:
-        
+        limpiar_consola()
         opcion = questionary.select(
             "Seleccione un ordenamiento:",
             choices = [

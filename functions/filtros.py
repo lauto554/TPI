@@ -36,6 +36,7 @@ def filtrar_paises(paises):
         lista_vacia(paises)
         return
     while True:
+        limpiar_consola()
         opcion = questionary.select(
             "Seleccione un filtro:",
             choices = [
@@ -71,4 +72,3 @@ def filtrar_paises(paises):
             resultados = filtrar_por_superficie(paises, minimo, maximo)
             mostrar_resultados(resultados, "Rango de superficie buscado", minimo, maximo, "km²")
         pausar()
-        limpiar_consola()

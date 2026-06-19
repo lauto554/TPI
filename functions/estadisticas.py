@@ -47,6 +47,7 @@ def mostrar_estadisticas(paises):
         lista_vacia(paises)
         return
     while True:
+        limpiar_consola()
         opcion = questionary.select(
             "Seleccione una estadistica:",
             choices = [
