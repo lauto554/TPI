@@ -20,8 +20,8 @@ El proyecto está organizado en módulos dentro de la carpeta `functions/` para 
 | Recurso | Enlace |
 |---|---|
 | Repositorio GitHub | [https://github.com/lauto554/TPI](https://github.com/lauto554/TPI) |
-| Video demostración | `[PENDIENTE: pegar enlace del video]` |
-| Informe PDF | `[PENDIENTE: pegar enlace o ruta al informe]` |
+| Video demostración | https://youtu.be/QkSYSbyWUUA |
+| Informe PDF | /informe.pdf |
 
 ## Requisitos previos
 
